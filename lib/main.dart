@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'question.dart';
-import 'answer.dart';
+import 'quiz.dart';
+import 'result.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,16 +16,7 @@ class MyApp extends StatefulWidget {
 
 //`_` makes MyAppState from public to private class
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-
-  void _answerQuestion() {
-    setState(() {
-      _questionIndex = _questionIndex + 1;
-    });
-    print(_questionIndex);
-  }
-
-  final questionList = [
+  final _questionList = const [
     {
       'questionText': 'What\'s my favorite color?',
       'answer': ['Black', 'White', 'Read', 'Green']
@@ -40,18 +31,27 @@ class _MyAppState extends State<MyApp> {
     },
   ];
 
+  var _questionIndex = 0;
+
+  void _answerQuestion() {
+    setState(() {
+      _questionIndex = _questionIndex + 1;
+    });
+
+    print(_questionIndex);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: Text("Quizzi App")),
-        body: Column(children: [
-          Question(questionList[_questionIndex]['questionText']),
-          ...(questionList[_questionIndex]['answer'] as List<String>)
-              .map((answer) {
-            return Answer(_answerQuestion, answer);
-          }).toList()
-        ]),
+        body: _questionIndex < _questionList.length
+            ? Quiz(
+                answerQuestion: _answerQuestion,
+                questionIndex: _questionIndex,
+                questionList: _questionList)
+            : Result(),
       ),
     );
   }
