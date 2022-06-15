@@ -25,9 +25,19 @@ class _MyAppState extends State<MyApp> {
     print(_questionIndex);
   }
 
-  var questionList = [
-    'What\'s my favorite color?',
-    'What\'s my name?',
+  final questionList = [
+    {
+      'questionText': 'What\'s my favorite color?',
+      'answer': ['Black', 'White', 'Read', 'Green']
+    },
+    {
+      'questionText': 'What\'s my name?',
+      'answer': ['Dog', 'Rabbit', 'Cat', 'Lion']
+    },
+    {
+      'questionText': 'Who\'s my favorite actor?',
+      'answer': ['Max', 'Mike', 'Miller', 'Moose']
+    },
   ];
 
   @override
@@ -36,10 +46,11 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         appBar: AppBar(title: Text("Quizzi App")),
         body: Column(children: [
-          Question(questionList[_questionIndex]),
-          Answer(_answerQuestion),
-          Answer(_answerQuestion),
-          Answer(_answerQuestion),
+          Question(questionList[_questionIndex]['questionText']),
+          ...(questionList[_questionIndex]['answer'] as List<String>)
+              .map((answer) {
+            return Answer(_answerQuestion, answer);
+          }).toList()
         ]),
       ),
     );
